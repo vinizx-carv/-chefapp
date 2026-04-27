@@ -43,11 +43,11 @@ Exemplo: card de receita usado em várias telas.
 
 ## 🧠 Resumo
 
-* models → dados
-* services → API
-* screens → telas
-* database → armazenamento
-* widgets → partes da interface
+- models → dados
+- services → API
+- screens → telas
+- database → armazenamento
+- widgets → partes da interface
 
 ---
 
