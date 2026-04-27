@@ -1,16 +1,56 @@
 # chefapp
 
-A new Flutter project.
+Flutter project ChefApp.
 
-## Getting Started
+# 📁 Estrutura do Projeto - ChefApp
 
-This project is a starting point for a Flutter application.
+Organizamos o projeto separando cada parte por responsabilidade, para manter o código limpo e fácil de entender.
 
-A few resources to get you started if this is your first Flutter project:
+## 📦 models/
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Responsável por representar os dados do app.
+Exemplo: Receita (nome, imagem, ingredientes).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🌐 services/
+
+Responsável por buscar dados da internet (API).
+Exemplo: conectar com a TheMealDB API para pegar receitas.
+
+---
+
+## 📱 screens/
+
+Responsável pelas telas do aplicativo.
+Exemplo: tela inicial, detalhes da receita e favoritos.
+
+---
+
+## 💾 database/
+
+Responsável por salvar dados no celular.
+Exemplo: salvar receitas favoritas e anotações.
+
+---
+
+## 🧩 widgets/
+
+Componentes reutilizáveis da interface.
+Exemplo: card de receita usado em várias telas.
+
+---
+
+## 🧠 Resumo
+
+* models → dados
+* services → API
+* screens → telas
+* database → armazenamento
+* widgets → partes da interface
+
+---
+
+## 🚀 Objetivo
+
+Essa organização facilita o desenvolvimento em equipe e deixa o projeto mais profissional.
