@@ -1,0 +1,1 @@
+enum SearchType {name,ingredient,category}
