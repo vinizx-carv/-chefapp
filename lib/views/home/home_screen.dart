@@ -1,17 +1,26 @@
-import 'package:chefapp/core/repositories/meal_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:chefapp/core/constants/enums.dart';
 import 'package:chefapp/core/http/http_client.dart';
+import 'package:chefapp/core/repositories/meal_repository.dart';
 import 'package:chefapp/controllers/category_store.dart';
-import 'package:chefapp/models/category_model.dart';
+import 'package:chefapp/views/home/widget/categorias.dart';
+import 'package:flutter/material.dart';
 
 class TelaHome extends StatefulWidget {
-  const TelaHome({super.key});
+  final Function(String query, {SearchType type}) onSearch;
+
+  const TelaHome({
+    super.key,
+    required this.onSearch,
+  });
 
   @override
   State<TelaHome> createState() => _TelaHomeState();
 }
 
 class _TelaHomeState extends State<TelaHome> {
+
+  final _searchController = TextEditingController();
+
   final categoryStore = CategoryStore(
     repository: MealRepositoryImpl(
       client: HttpClientImpl(),
@@ -25,12 +34,22 @@ class _TelaHomeState extends State<TelaHome> {
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToSearch() {
+    if (_searchController.text.isEmpty) return;
+    widget.onSearch(_searchController.text);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
 
-          // header - não muda nada aqui
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -98,12 +117,18 @@ class _TelaHomeState extends State<TelaHome> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const TextField(
+                    child: TextField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         hintText: 'Buscar receitas ou ingredientes...',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.arrow_forward),
+                          onPressed: _navigateToSearch,
+                        ),
                       ),
+                      onSubmitted: (_) => _navigateToSearch(),
                     ),
                   ),
                 ],
@@ -111,44 +136,68 @@ class _TelaHomeState extends State<TelaHome> {
             ),
           ),
 
-          // lista de categorias
-          Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: categoryStore.isLoading,
-              builder: (context, isLoading, _) {
+          const SizedBox(height: 10),
 
-                // carregando
-                if (isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(
+                  left: 13,
+                  bottom: 15,
+                ),
+                child: Text(
+                  'Categorias',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
 
-                // erro
-                if (categoryStore.error.value.isNotEmpty) {
-                  return Center(
-                    child: Text(categoryStore.error.value),
-                  );
-                }
+              ValueListenableBuilder(
+                valueListenable: categoryStore.isLoading,
+                builder: (context, isLoading, _) {
 
-                // sucesso
-                return ValueListenableBuilder(
-                  valueListenable: categoryStore.categories,
-                  builder: (context, categories, _) {
-                    return ListView.builder(
-                      itemCount: categories.length,
-                      itemBuilder: (context, index) {
-                        final category = categories[index];
-                        return ListTile(
-                          leading: Image.network(category.image),
-                          title: Text(category.name),
-                        );
-                      },
+                  if (isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                );
-              },
-            ),
+                  }
+
+                  if (categoryStore.error.value.isNotEmpty) {
+                    return Center(
+                      child: Text(categoryStore.error.value),
+                    );
+                  }
+
+                  return ValueListenableBuilder(
+                    valueListenable: categoryStore.categories,
+                    builder: (context, categories, _) {
+                      return SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            return GestureDetector(
+                              onTap: () {
+                                widget.onSearch(
+                                  category.name,
+                                  type: SearchType.category,
+                                );
+                              },
+                              child: CategoryCard(category: category),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),

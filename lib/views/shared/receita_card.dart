@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import '../../models/receita_model.dart';
+import 'package:chefapp/models/meal_summary_model.dart';
 
 class ReceitaCard extends StatelessWidget {
 
-  final ReceitaModel receita;
+  final MealSummaryModel receita;
 
   const ReceitaCard({
     super.key,
@@ -13,180 +12,179 @@ class ReceitaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        return Card(
+    return Card(
 
-  elevation: 2,
+      elevation: 2,
 
-  margin: const EdgeInsets.symmetric(
-    horizontal: 16,
-    vertical: 8,
-  ),
+      margin: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
+      ),
 
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(20),
-  ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
 
-  child: Padding(
+      child: Padding(
 
-    padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
 
-    child: Row(
+        child: Row(
 
-      children: [
+          children: [
 
-        ClipRRect(
+            ClipRRect(
 
-          borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16),
 
-          child: Image.asset(
+              child: Image.network(
 
-            receita.imagem,
+                receita.image,
 
-            height: 90,
-            width: 90,
+                height: 90,
+                width: 90,
 
-            fit: BoxFit.cover,
+                fit: BoxFit.cover,
 
-            errorBuilder: (context, error, stackTrace) {
-            return Container(
-            
-              height: 90,
-              width: 90,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
 
-              decoration: BoxDecoration(
-              
-                color: Colors.grey.shade300,
-
-                borderRadius: BorderRadius.circular(16),
-              ),
-
-              child: const Icon(
-                Icons.restaurant,
-                size: 40,
-                color: Colors.grey,
-              ),
-            );
-          },
-        ),
-          
-        ),
-
-        const SizedBox(width: 14),
-
-        Expanded(
-
-          child: Column(
-
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-
-              Text(
-
-                receita.titulo,
-
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Row(
-
-                children: [
-
-                  const Icon(
-                    Icons.star,
-                    color: Colors.orange,
-                    size: 18,
-                  ),
-
-                  const SizedBox(width: 4),
-
-                  Text(
-                    receita.nota.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-
-                  const SizedBox(width: 14),
-
-                  Container(
-
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
+                    height: 90,
+                    width: 90,
 
                     decoration: BoxDecoration(
 
-                      color: const Color(0xFFFFE8D9),
+                      color: Colors.grey.shade300,
 
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(16),
                     ),
 
-                    child: const Text(
-
-                      'Médio',
-
-                      style: TextStyle(
-                        color: Color(0xFFEC5C04),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                      ),
+                    child: const Icon(
+                      Icons.restaurant,
+                      size: 40,
+                      color: Colors.grey,
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
+            ),
 
-              const SizedBox(height: 12),
+            const SizedBox(width: 14),
 
-              Row(
+            Expanded(
+
+              child: Column(
+
+                crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
 
-                  const Icon(
-                    Icons.access_time,
-                    size: 18,
-                    color: Colors.grey,
-                  ),
-
-                  const SizedBox(width: 4),
-
                   Text(
-                    receita.tempo,
+
+                    receita.name,
+
                     style: const TextStyle(
-                      color: Colors.grey,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(width: 16),
+                  const SizedBox(height: 8),
 
-                  const Icon(
-                    Icons.local_fire_department,
-                    size: 18,
-                    color: Colors.grey,
+                  Row(
+
+                    children: [
+
+                      const Icon(
+                        Icons.star,
+                        color: Colors.orange,
+                        size: 18,
+                      ),
+
+                      const SizedBox(width: 4),
+
+                      const Text(
+                        '4.5', // mockado
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+
+                      const SizedBox(width: 14),
+
+                      Container(
+
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+
+                        decoration: BoxDecoration(
+
+                          color: const Color(0xFFFFE8D9),
+
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+
+                        child: const Text(
+
+                          'Médio', // mockado
+
+                          style: TextStyle(
+                            color: Color(0xFFEC5C04),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
 
-                  const SizedBox(width: 4),
+                  const SizedBox(height: 12),
 
-                  const Text(
-                    '520 kcal',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
+                  Row(
+
+                    children: [
+
+                      const Icon(
+                        Icons.access_time,
+                        size: 18,
+                        color: Colors.grey,
+                      ),
+
+                      const SizedBox(width: 4),
+
+                      const Text(
+                        '30 min', // mockado
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      const Icon(
+                        Icons.local_fire_department,
+                        size: 18,
+                        color: Colors.grey,
+                      ),
+
+                      const SizedBox(width: 4),
+
+                      const Text(
+                        '520 kcal', // mockado
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
-    ),
-  ),
-);
+      ),
+    );
   }
 }
