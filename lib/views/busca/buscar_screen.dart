@@ -4,6 +4,7 @@ import 'package:chefapp/core/http/http_client.dart';
 import 'package:chefapp/core/repositories/meal_repository.dart';
 import 'package:chefapp/views/shared/receita_card.dart';
 import 'package:flutter/material.dart';
+import 'package:chefapp/views/receita/recipe_details_page.dart';
 
 class TelaBuscar extends StatefulWidget {
   final String? initialQuery;
@@ -91,6 +92,7 @@ class _TelaBuscarState extends State<TelaBuscar> {
                     ),
                     child: TextField(
                       controller: _searchController,
+                      textAlignVertical: TextAlignVertical.center,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         icon: const Icon(Icons.search),
@@ -145,7 +147,19 @@ class _TelaBuscarState extends State<TelaBuscar> {
                     return ListView.builder(
                       itemCount: meals.length,
                       itemBuilder: (context, index) {
-                        return ReceitaCard(receita: meals[index]);
+                        return ReceitaCard(
+                          receita: meals[index],
+                          onTap: (){
+                            Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => RecipeDetailsPage(
+                                mealId: meals[index].id,
+                              ),
+                            ),
+                          );
+                          }
+                        );                      
                       },
                     );
                   },

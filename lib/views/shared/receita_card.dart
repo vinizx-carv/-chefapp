@@ -2,187 +2,156 @@ import 'package:flutter/material.dart';
 import 'package:chefapp/models/meal_summary_model.dart';
 
 class ReceitaCard extends StatelessWidget {
-
   final MealSummaryModel receita;
+  final VoidCallback onTap;
 
-  const ReceitaCard({
-    super.key,
-    required this.receita,
-  });
+  const ReceitaCard({super.key, required this.receita, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
 
-      elevation: 2,
+      onTap: onTap,
 
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
+      child: Card(
+        elevation: 2,
 
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
 
-      child: Padding(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
 
-        padding: const EdgeInsets.all(12),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
 
-        child: Row(
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
 
-          children: [
+                child: Image.network(
+                  receita.image,
 
-            ClipRRect(
+                  height: 90,
+                  width: 90,
 
-              borderRadius: BorderRadius.circular(16),
+                  fit: BoxFit.cover,
 
-              child: Image.network(
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 90,
+                      width: 90,
 
-                receita.image,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
 
-                height: 90,
-                width: 90,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
 
-                fit: BoxFit.cover,
-
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-
-                    height: 90,
-                    width: 90,
-
-                    decoration: BoxDecoration(
-
-                      color: Colors.grey.shade300,
-
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-
-                    child: const Icon(
-                      Icons.restaurant,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
-                  );
-                },
+                      child: const Icon(
+                        Icons.restaurant,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
 
-            const SizedBox(width: 14),
+              const SizedBox(width: 14),
 
-            Expanded(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
 
-              child: Column(
+                  children: [
+                    Text(
+                      receita.name,
 
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                children: [
-
-                  Text(
-
-                    receita.name,
-
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  Row(
+                    Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.orange, size: 18),
 
-                    children: [
+                        const SizedBox(width: 4),
 
-                      const Icon(
-                        Icons.star,
-                        color: Colors.orange,
-                        size: 18,
-                      ),
-
-                      const SizedBox(width: 4),
-
-                      const Text(
-                        '4.5', // mockado
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-
-                      const SizedBox(width: 14),
-
-                      Container(
-
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
+                        const Text(
+                          '4.5', // mockado
+                          style: TextStyle(fontWeight: FontWeight.w600),
                         ),
 
-                        decoration: BoxDecoration(
+                        const SizedBox(width: 14),
 
-                          color: const Color(0xFFFFE8D9),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
 
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFE8D9),
 
-                        child: const Text(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
 
-                          'Médio', // mockado
+                          child: const Text(
+                            'Médio', // mockado
 
-                          style: TextStyle(
-                            color: Color(0xFFEC5C04),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
+                            style: TextStyle(
+                              color: Color(0xFFEC5C04),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
 
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                  Row(
-
-                    children: [
-
-                      const Icon(
-                        Icons.access_time,
-                        size: 18,
-                        color: Colors.grey,
-                      ),
-
-                      const SizedBox(width: 4),
-
-                      const Text(
-                        '30 min', // mockado
-                        style: TextStyle(
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.access_time,
+                          size: 18,
                           color: Colors.grey,
                         ),
-                      ),
 
-                      const SizedBox(width: 16),
+                        const SizedBox(width: 4),
 
-                      const Icon(
-                        Icons.local_fire_department,
-                        size: 18,
-                        color: Colors.grey,
-                      ),
+                        const Text(
+                          '30 min', // mockado
+                          style: TextStyle(color: Colors.grey),
+                        ),
 
-                      const SizedBox(width: 4),
+                        const SizedBox(width: 16),
 
-                      const Text(
-                        '520 kcal', // mockado
-                        style: TextStyle(
+                        const Icon(
+                          Icons.local_fire_department,
+                          size: 18,
                           color: Colors.grey,
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+
+                        const SizedBox(width: 4),
+
+                        const Text(
+                          '520 kcal', // mockado
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
