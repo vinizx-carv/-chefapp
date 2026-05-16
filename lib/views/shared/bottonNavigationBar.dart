@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           TelaHome(onSearch: _navigateToSearch),
           TelaBuscar(
+            key: ValueKey(_searchQuery ?? ''),
             initialQuery: _searchQuery,
             initialType: _searchType,
           ),
@@ -49,14 +50,8 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Buscar',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite_border),
             label: 'Favorito',
