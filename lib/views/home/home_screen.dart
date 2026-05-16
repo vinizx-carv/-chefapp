@@ -138,40 +138,164 @@ class _TelaHomeState extends State<TelaHome> {
                   ),
                 ),
 
-                // imagem
                 Positioned(
-                  bottom: -150,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Container(
-                      width: 370,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
-                          image: NetworkImage('https://picsum.photos/300'),
-                          fit: BoxFit.cover,
+                bottom: -150,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    width: 370,
+                    height: 170,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://4kwallpapers.com/images/walls/thumbs_3t/24150.jpg',
                         ),
-                        boxShadow: const [
-                          BoxShadow(blurRadius: 10, color: Colors.black26),
-                        ],
+                        fit: BoxFit.cover,
                       ),
+                      boxShadow: const [
+                        BoxShadow(blurRadius: 10, color: Colors.black26),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.75),
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        Positioned(
+                          top: 12,
+                          left: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF7A00),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'EM DESTAQUE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        Positioned(
+                          bottom: 12,
+                          left: 14,
+                          right: 14,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                'Spaghetti alla Carbonara',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+
+                              const SizedBox(height: 6),
+
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Color(0xFFFFD700),
+                                    size: 15,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  const Text(
+                                    '4.9',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 14),
+
+                                  const Icon(
+                                    Icons.access_time,
+                                    color: Colors.white70,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  const Text(
+                                    '20 min',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 14),
+
+                                  const Icon(
+                                    Icons.local_fire_department,
+                                    color: Colors.white70,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(width: 3),
+                                  const Text(
+                                    '490 kcal',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+              ),
               ],
             ),
 
-            // espaço da imagem
             const SizedBox(height: 160),
 
-            // categorias
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 13, bottom: 15),
+                  padding: EdgeInsets.only(left: 20, bottom: 15),
                   child: Text(
                     'Categorias',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -218,14 +342,13 @@ class _TelaHomeState extends State<TelaHome> {
               ],
             ),
 
-            const SizedBox(height: 24),
+  
 
-            // sugestões aleatórias
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 13, bottom: 15),
+                  padding: EdgeInsets.only(left: 20, bottom: 0),
                   child: Text(
                     'Sugestões para você',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
