@@ -1,5 +1,7 @@
 import 'package:chefapp/controllers/favorites_store.dart';
 import 'package:chefapp/core/database/database_service.dart';
+import 'package:chefapp/core/listeners/favorite_listener.dart';
+import 'package:chefapp/core/listeners/favorite_notifier.dart';
 import 'package:chefapp/views/receita/recipe_details_page.dart';
 import 'package:chefapp/views/shared/receita_card.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,8 @@ class TelaFavorito extends StatefulWidget {
   State<TelaFavorito> createState() => _TelaFavoritoState();
 }
 
-class _TelaFavoritoState extends State<TelaFavorito> {
+class _TelaFavoritoState extends State<TelaFavorito>
+    implements FavoriteListener {
 
   final favoritesStore = FavoritesStore(
     databaseService: DatabaseService(),
@@ -21,6 +24,18 @@ class _TelaFavoritoState extends State<TelaFavorito> {
   void initState() {
     super.initState();
     favoritesStore.getFavorites();
+    FavoriteNotifier().addListener(this);
+  }
+
+  @override
+  void dispose() {
+    FavoriteNotifier().removeListener(this);
+    super.dispose();
+  }
+
+  @override
+  void onFavoriteChanged() {
+    favoritesStore.getFavorites();
   }
 
   @override
@@ -29,7 +44,6 @@ class _TelaFavoritoState extends State<TelaFavorito> {
       body: Column(
         children: [
 
-          // header
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -55,7 +69,6 @@ class _TelaFavoritoState extends State<TelaFavorito> {
             ),
           ),
 
-          // lista de favoritos
           Expanded(
             child: ValueListenableBuilder(
               valueListenable: favoritesStore.isLoading,
@@ -107,7 +120,7 @@ class _TelaFavoritoState extends State<TelaFavorito> {
 
                         return ReceitaCard(
                           receita: meal,
-                          isFavorite: true, // na tela de favoritos sempre é true
+                          isFavorite: true,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -120,8 +133,7 @@ class _TelaFavoritoState extends State<TelaFavorito> {
                           },
                           onFavoriteTap: () async {
                             await favoritesStore.toggleFavorite(meal);
-                            // atualiza a lista após remover
-                            favoritesStore.getFavorites();
+                            FavoriteNotifier().notify();
                           },
                         );
                       },

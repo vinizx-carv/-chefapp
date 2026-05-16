@@ -3,6 +3,7 @@ import 'package:chefapp/controllers/search_store.dart';
 import 'package:chefapp/core/constants/enums.dart';
 import 'package:chefapp/core/database/database_service.dart';
 import 'package:chefapp/core/http/http_client.dart';
+import 'package:chefapp/core/listeners/favorite_notifier.dart';
 import 'package:chefapp/core/repositories/meal_repository.dart';
 import 'package:chefapp/views/receita/recipe_details_page.dart';
 import 'package:chefapp/views/shared/receita_card.dart';
@@ -155,33 +156,28 @@ class _TelaBuscarState extends State<TelaBuscar> {
                       itemBuilder: (context, index) {
                         final meal = meals[index];
 
-                        return ValueListenableBuilder(
-                          valueListenable: favoritesStore.isFavorite,
-                          builder: (context, _, __) {
+                        return FutureBuilder<bool>(
+                          future: DatabaseService().isFavorite(meal.id),
+                          builder: (context, snapshot) {
+                            final isFav = snapshot.data ?? false;
 
-                            return FutureBuilder<bool>(
-                              future: DatabaseService().isFavorite(meal.id),
-                              builder: (context, snapshot) {
-                                final isFav = snapshot.data ?? false;
-
-                                return ReceitaCard(
-                                  receita: meal,
-                                  isFavorite: isFav,
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => RecipeDetailsPage(
-                                          mealId: meal.id,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onFavoriteTap: () async {
-                                    await favoritesStore.toggleFavorite(meal);
-                                    setState(() {});
-                                  },
+                            return ReceitaCard(
+                              receita: meal,
+                              isFavorite: isFav,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => RecipeDetailsPage(
+                                      mealId: meal.id,
+                                    ),
+                                  ),
                                 );
+                              },
+                              onFavoriteTap: () async {
+                                await favoritesStore.toggleFavorite(meal);
+                                FavoriteNotifier().notify();
+                                setState(() {});
                               },
                             );
                           },
