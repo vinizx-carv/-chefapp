@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+// Para wake lock real, adicione wakelock_plus no pubspec.yaml:
+// import 'package:wakelock_plus/wakelock_plus.dart';
+
+class TelasSempreLigadaWidget extends StatefulWidget {
+  const TelasSempreLigadaWidget({super.key});
+
+  @override
+  State<TelasSempreLigadaWidget> createState() => _TelasSempreLigadaWidgetState();
+}
+
+class _TelasSempreLigadaWidgetState extends State<TelasSempreLigadaWidget> {
+  bool _ativo = false;
+
+  void _toggle(bool value) {
+    setState(() => _ativo = value);
+    // WakelockPlus.toggle(enable: value);
+    debugPrint('Wake lock: $value');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Tela sempre ligada',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Row(
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _ativo ? Colors.green : colorScheme.outline,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    _ativo ? 'Ativo' : 'Inativo',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: _ativo ? Colors.green : colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Switch(
+          value: _ativo,
+          onChanged: _toggle,
+        ),
+      ],
+    );
+  }
+}
