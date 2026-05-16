@@ -4,15 +4,11 @@ import 'package:chefapp/models/meal_summary_model.dart';
 class ReceitaCard extends StatelessWidget {
   final MealSummaryModel receita;
   final VoidCallback onTap;
-  final bool isFavorite;
-  final VoidCallback onFavoriteTap;
 
   const ReceitaCard({
     super.key,
     required this.receita,
     required this.onTap,
-    required this.isFavorite,
-    required this.onFavoriteTap,
   });
 
   @override
@@ -59,28 +55,13 @@ class ReceitaCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            receita.name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
 
-                        // botão de estrela
-                        IconButton(
-                          onPressed: onFavoriteTap,
-                          icon: Icon(
-                            isFavorite ? Icons.star : Icons.star_border,
-                            color: isFavorite ? Colors.orange : Colors.grey,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      receita.name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
 
                     const SizedBox(height: 8),

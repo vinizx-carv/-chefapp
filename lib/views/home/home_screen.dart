@@ -3,9 +3,11 @@ import 'package:chefapp/controllers/random_meal_store.dart';
 import 'package:chefapp/core/constants/enums.dart';
 import 'package:chefapp/core/http/http_client.dart';
 import 'package:chefapp/core/repositories/meal_repository.dart';
+import 'package:chefapp/models/meal_summary_model.dart';
 import 'package:chefapp/views/home/widget/categorias.dart';
 import 'package:chefapp/views/home/widget/random_meal_card.dart';
 import 'package:chefapp/views/receita/recipe_details_page.dart';
+import 'package:chefapp/views/shared/receita_card.dart';
 import 'package:flutter/material.dart';
 
 class TelaHome extends StatefulWidget {
@@ -28,11 +30,16 @@ class _TelaHomeState extends State<TelaHome> {
     repository: MealRepositoryImpl(client: HttpClientImpl()),
   );
 
+  final destaqueStore = RandomMealStore(
+    repository: MealRepositoryImpl(client: HttpClientImpl()),
+  );
+
   @override
   void initState() {
     super.initState();
     categoryStore.getCategories();
     randomMealStore.getRandomMeals(2);
+    destaqueStore.getRandomMeals(4);
   }
 
   @override
@@ -379,6 +386,68 @@ class _TelaHomeState extends State<TelaHome> {
                             final meal = meals[index];
                             return RandomMealCard(
                               meal: meal,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => RecipeDetailsPage(
+                                      mealId: meal.id,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            // destaques
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 13, bottom: 15),
+                  child: Text(
+                    'Destaques',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                ValueListenableBuilder(
+                  valueListenable: destaqueStore.isLoading,
+                  builder: (context, isLoading, _) {
+                    if (isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (destaqueStore.error.value.isNotEmpty) {
+                      return Center(child: Text(destaqueStore.error.value));
+                    }
+
+                    return ValueListenableBuilder(
+                      valueListenable: destaqueStore.meals,
+                      builder: (context, meals, _) {
+                        if (meals.isEmpty) return const SizedBox();
+
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: meals.length,
+                          itemBuilder: (context, index) {
+                            final meal = meals[index];
+                            return ReceitaCard(
+                              receita: MealSummaryModel(
+                                id:    meal.id,
+                                name:  meal.name,
+                                image: meal.image,
+                              ),
                               onTap: () {
                                 Navigator.push(
                                   context,
