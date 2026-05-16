@@ -11,6 +11,7 @@ abstract class MealRepository {
   Future<List<CategoryModel>> getCategories();
   Future<MealModel> getMealById(String id);
   Future<List<MealSummaryModel>> search(SearchType type, String value);
+  Future<MealModel> getRandomMeal();
 }
 
 class MealRepositoryImpl implements MealRepository {
@@ -59,6 +60,18 @@ class MealRepositoryImpl implements MealRepository {
       return list.map((item) => MealSummaryModel.fromMap(item)).toList();
     } else {
       throw Exception('Erro ao buscar receitas');
+    }
+  }
+
+  @override
+  Future<MealModel> getRandomMeal() async {
+    final response = await client.get(url: '$_baseUrl/random.php');
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return MealModel.fromMap(data['meals'][0]);
+    } else {
+      throw Exception('Erro ao buscar receita aleatória');
     }
   }
 }
