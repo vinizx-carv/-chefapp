@@ -117,10 +117,8 @@ class _TelaFavoritoState extends State<TelaFavorito>
                       itemCount: favorites.length,
                       itemBuilder: (context, index) {
                         final meal = favorites[index];
-
                         return ReceitaCard(
                           receita: meal,
-                          isFavorite: true,
                           onTap: () {
                             Navigator.push(
                               context,
@@ -130,10 +128,6 @@ class _TelaFavoritoState extends State<TelaFavorito>
                                 ),
                               ),
                             );
-                          },
-                          onFavoriteTap: () async {
-                            await favoritesStore.toggleFavorite(meal);
-                            FavoriteNotifier().notify();
                           },
                         );
                       },

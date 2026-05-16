@@ -7,8 +7,13 @@ import 'package:chefapp/models/meal_summary_model.dart';
 
 class RecipeHeader extends StatefulWidget {
   final MealModel receita;
+  final VoidCallback? onVerVideo;
 
-  const RecipeHeader({super.key, required this.receita});
+  const RecipeHeader({
+    super.key,
+    required this.receita,
+    this.onVerVideo,
+  });
 
   @override
   State<RecipeHeader> createState() => _RecipeHeaderState();
@@ -31,6 +36,8 @@ class _RecipeHeaderState extends State<RecipeHeader> {
     return SafeArea(
       child: Stack(
         children: [
+
+          // imagem sempre aparece
           Image.network(
             widget.receita.image,
             height: 300,
@@ -84,6 +91,44 @@ class _RecipeHeaderState extends State<RecipeHeader> {
               },
             ),
           ),
+
+          // botão ver vídeo — só aparece se tiver vídeo
+          if (widget.onVerVideo != null)
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: GestureDetector(
+                onTap: widget.onVerVideo,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.play_circle_filled,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'Ver Vídeo',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

@@ -1,16 +1,17 @@
+import 'package:chefapp/controllers/notes_store.dart';
 import 'package:flutter/material.dart';
-
 import 'package:chefapp/models/meal_model.dart';
-
 import 'package:chefapp/views/receita/widget/instruction_step_card.dart';
 
 class InstructionsSection extends StatelessWidget {
 
   final MealModel receita;
+  final NotesStore notesStore;
 
   const InstructionsSection({
     super.key,
     required this.receita,
+    required this.notesStore,
   });
 
   @override
@@ -22,24 +23,16 @@ class InstructionsSection extends StatelessWidget {
         .toList();
 
     return Padding(
-
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-      ),
-
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-
         children: List.generate(
-
           steps.length,
-
           (index) {
-
             return InstructionStepCard(
-
               step: index + 1,
-
               text: steps[index].trim(),
+              mealId: receita.id,
+              notesStore: notesStore,
             );
           },
         ),
