@@ -11,7 +11,7 @@ abstract class MealRepository {
   Future<List<CategoryModel>> getCategories();
   Future<MealModel> getMealById(String id);
   Future<List<MealSummaryModel>> search(SearchType type, String value);
-  Future<MealModel> getRandomMeal();
+  Future<List<MealModel>> getRandomMeals(int count);
 }
 
 class MealRepositoryImpl implements MealRepository {
@@ -64,7 +64,15 @@ class MealRepositoryImpl implements MealRepository {
   }
 
   @override
-  Future<MealModel> getRandomMeal() async {
+  Future<List<MealModel>> getRandomMeals(int count) async {
+    final meals = await Future.wait(
+      List.generate(count, (_) => _fetchRandomMeal()),
+    );
+    return meals;
+  }
+
+  // método privado que busca uma receita aleatória
+  Future<MealModel> _fetchRandomMeal() async {
     final response = await client.get(url: '$_baseUrl/random.php');
 
     if (response.statusCode == 200) {

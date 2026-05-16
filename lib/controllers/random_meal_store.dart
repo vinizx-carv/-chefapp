@@ -9,13 +9,13 @@ class RandomMealStore {
 
   final ValueNotifier<bool> isLoading = ValueNotifier(false);
   final ValueNotifier<String> error = ValueNotifier('');
-  final ValueNotifier<MealModel?> meal = ValueNotifier(null);
+  final ValueNotifier<List<MealModel>> meals = ValueNotifier([]);
 
-  Future<void> getRandomMeal() async {
+  Future<void> getRandomMeals(int count) async {
     isLoading.value = true;
 
     try {
-      meal.value = await repository.getRandomMeal();
+      meals.value = await repository.getRandomMeals(count);
     } catch (e) {
       error.value = e.toString();
     } finally {

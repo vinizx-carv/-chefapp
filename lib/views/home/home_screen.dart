@@ -1,8 +1,11 @@
+import 'package:chefapp/controllers/category_store.dart';
+import 'package:chefapp/controllers/random_meal_store.dart';
 import 'package:chefapp/core/constants/enums.dart';
 import 'package:chefapp/core/http/http_client.dart';
 import 'package:chefapp/core/repositories/meal_repository.dart';
-import 'package:chefapp/controllers/category_store.dart';
 import 'package:chefapp/views/home/widget/categorias.dart';
+import 'package:chefapp/views/home/widget/random_meal_card.dart';
+import 'package:chefapp/views/receita/recipe_details_page.dart';
 import 'package:flutter/material.dart';
 
 class TelaHome extends StatefulWidget {
@@ -21,10 +24,15 @@ class _TelaHomeState extends State<TelaHome> {
     repository: MealRepositoryImpl(client: HttpClientImpl()),
   );
 
+  final randomMealStore = RandomMealStore(
+    repository: MealRepositoryImpl(client: HttpClientImpl()),
+  );
+
   @override
   void initState() {
     super.initState();
     categoryStore.getCategories();
+    randomMealStore.getRandomMeals(2);
   }
 
   @override
@@ -41,214 +49,236 @@ class _TelaHomeState extends State<TelaHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
- 
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFEC5C04), Color(0xFFFF7A00)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFFEC5C04), Color(0xFFFF7A00)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
-                ),
-
-                child: SafeArea(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white24,
-
-                            child: IconButton(
-                              onPressed: () {},
-
-                              icon: const Icon(
-                                Icons.restaurant,
-                                color: Colors.white,
+                  child: SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.white24,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.restaurant,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-
-                          CircleAvatar(
-                            backgroundColor: Colors.white24,
-
-                            child: IconButton(
-                              onPressed: () {},
-
-                              icon: const Icon(
-                                Icons.notifications_none,
-                                color: Colors.white,
+                            CircleAvatar(
+                              backgroundColor: Colors.white24,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.notifications_none,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          'O que vamos\ncozinhar hoje?',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-
-                      const Text(
-                        'O que vamos\ncozinhar hoje?',
-
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          height: 1.2,
                         ),
-                      ),
-
-                      const SizedBox(height: 10),
-
-                      const Text(
-                        'Explore mais de 300 receitas incríveis',
-
-                        style: TextStyle(color: Colors.white70, fontSize: 16),
-                      ),
-
-                      const SizedBox(height: 25),
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-
-                          borderRadius: BorderRadius.circular(18),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Explore mais de 300 receitas incríveis',
+                          style: TextStyle(color: Colors.white70, fontSize: 16),
                         ),
-
-                        child: TextField(
-                          controller: _searchController,
-
-                          textAlignVertical: TextAlignVertical.center,
-
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-
-                            icon: const Icon(Icons.search),
-
-                            hintText: 'Buscar receitas ou ingredientes...',
-
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.arrow_forward),
-
-                              onPressed: _navigateToSearch,
+                        const SizedBox(height: 25),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: TextField(
+                            controller: _searchController,
+                            textAlignVertical: TextAlignVertical.center,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              icon: const Icon(Icons.search),
+                              hintText: 'Buscar receitas ou ingredientes...',
+                              suffixIcon: IconButton(
+                                icon: const Icon(Icons.arrow_forward),
+                                onPressed: _navigateToSearch,
+                              ),
                             ),
+                            onSubmitted: (_) => _navigateToSearch(),
                           ),
-
-                          onSubmitted: (_) => _navigateToSearch(),
                         ),
-                      ),
-
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-
-              // IMAGEM
-              Positioned(
-                bottom: -150,
-                left: 0,
-                right: 0,
-
-                child: Center(
-                  child: Container(
-                    width: 370,
-                    height: 170,
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-
-                      image: const DecorationImage(
-                        image: NetworkImage('https://picsum.photos/300'),
-                        fit: BoxFit.cover,
-                      ),
-
-                      boxShadow: const [
-                        BoxShadow(blurRadius: 10, color: Colors.black26),
+                        const SizedBox(height: 20),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
 
-          // espaço da imagem
-          const SizedBox(height: 160),
-
-          // CATEGORIAS
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 13, bottom: 15),
-
-                child: Text(
-                  'Categorias',
-
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                // imagem
+                Positioned(
+                  bottom: -150,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      width: 370,
+                      height: 170,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image: NetworkImage('https://picsum.photos/300'),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(blurRadius: 10, color: Colors.black26),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
+            ),
 
-              ValueListenableBuilder(
-                valueListenable: categoryStore.isLoading,
+            // espaço da imagem
+            const SizedBox(height: 160),
 
-                builder: (context, isLoading, _) {
-                  if (isLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+            // categorias
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 13, bottom: 15),
+                  child: Text(
+                    'Categorias',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
 
-                  if (categoryStore.error.value.isNotEmpty) {
-                    return Center(child: Text(categoryStore.error.value));
-                  }
+                ValueListenableBuilder(
+                  valueListenable: categoryStore.isLoading,
+                  builder: (context, isLoading, _) {
+                    if (isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  return ValueListenableBuilder(
-                    valueListenable: categoryStore.categories,
+                    if (categoryStore.error.value.isNotEmpty) {
+                      return Center(child: Text(categoryStore.error.value));
+                    }
 
-                    builder: (context, categories, _) {
-                      return SizedBox(
-                        height: 150,
+                    return ValueListenableBuilder(
+                      valueListenable: categoryStore.categories,
+                      builder: (context, categories, _) {
+                        return SizedBox(
+                          height: 150,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories.length,
+                            itemBuilder: (context, index) {
+                              final category = categories[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  widget.onSearch(
+                                    category.name,
+                                    type: SearchType.category,
+                                  );
+                                },
+                                child: CategoryCard(category: category),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
 
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
+            const SizedBox(height: 24),
 
-                          itemCount: categories.length,
+            // sugestões aleatórias
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 13, bottom: 15),
+                  child: Text(
+                    'Sugestões para você',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
 
+                ValueListenableBuilder(
+                  valueListenable: randomMealStore.isLoading,
+                  builder: (context, isLoading, _) {
+                    if (isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (randomMealStore.error.value.isNotEmpty) {
+                      return Center(child: Text(randomMealStore.error.value));
+                    }
+
+                    return ValueListenableBuilder(
+                      valueListenable: randomMealStore.meals,
+                      builder: (context, meals, _) {
+                        if (meals.isEmpty) return const SizedBox();
+
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: meals.length,
                           itemBuilder: (context, index) {
-                            final category = categories[index];
-
-                            return GestureDetector(
+                            final meal = meals[index];
+                            return RandomMealCard(
+                              meal: meal,
                               onTap: () {
-                                widget.onSearch(
-                                  category.name,
-                                  type: SearchType.category,
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => RecipeDetailsPage(
+                                      mealId: meal.id,
+                                    ),
+                                  ),
                                 );
                               },
-
-                              child: CategoryCard(category: category),
                             );
                           },
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }
