@@ -22,7 +22,14 @@ class _TelasSempreLigadaWidgetState extends State<TelasSempreLigadaWidget> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Row(
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
       children: [
         Expanded(
           child: Column(
@@ -63,8 +70,10 @@ class _TelasSempreLigadaWidgetState extends State<TelasSempreLigadaWidget> {
         Switch(
           value: _ativo,
           onChanged: _toggle,
+          activeColor: Colors.green,
         ),
       ],
+      ),
     );
   }
 }
