@@ -1,5 +1,6 @@
 import 'package:chefapp/controllers/notes_store.dart';
 import 'package:chefapp/core/database/database_service.dart';
+import 'package:chefapp/views/shared/cook_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:chefapp/models/meal_model.dart';
 import 'package:chefapp/core/http/http_client.dart';
@@ -115,17 +116,16 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
           return Stack(
             children: [
 
-              // conteúdo principal
               SingleChildScrollView(
                 child: Column(
                   children: [
-
                     RecipeHeader(
                       receita: receita,
                       onVerVideo: videoId != null
                           ? () => _abrirMiniPlayer(videoId)
                           : null,
                     ),
+                    const TelasSempreLigadaWidget(),
                     RecipeInfo(receita: receita),
                     const RecipeStats(),
                     RecipeTabs(
@@ -235,7 +235,6 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                 ),
               ),
 
-              // mini player fixo na parte de baixo
               if (_mostrarPlayer && _videoController != null)
                 Positioned(
                   bottom: 0,
@@ -263,7 +262,6 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                         child: Column(
                           children: [
 
-                            // barra de fechar
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
@@ -296,6 +294,7 @@ class _RecipeDetailsPageState extends State<RecipeDetailsPage> {
                       );
                     },
                   ),
+                  
                 ),
             ],
           );
