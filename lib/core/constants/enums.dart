@@ -1,1 +1,1 @@
-enum SearchType {name,ingredient,category}
+enum SearchType {category,ingredient,name}
