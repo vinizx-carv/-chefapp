@@ -2,6 +2,8 @@ import 'package:chefapp/controllers/search_store.dart';
 import 'package:chefapp/core/constants/enums.dart';
 import 'package:chefapp/core/http/http_client.dart';
 import 'package:chefapp/core/repositories/meal_repository.dart';
+import 'package:chefapp/views/busca/widget/search_header.dart';
+import 'package:chefapp/views/busca/widget/search_results.dart';
 import 'package:chefapp/views/receita/recipe_details_page.dart';
 import 'package:chefapp/views/shared/receita_card.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,7 @@ class _TelaBuscarState extends State<TelaBuscar> {
       text: widget.initialQuery,
     );
 
-    _selectedType = widget.initialType ?? SearchType.name;
+    _selectedType = widget.initialType ?? SearchType.category;
 
     if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
       searchStore.search(_selectedType, widget.initialQuery!);
@@ -55,7 +57,7 @@ class _TelaBuscarState extends State<TelaBuscar> {
         widget.initialQuery!.isNotEmpty) {
 
       _searchController.text = widget.initialQuery!;
-      _selectedType = widget.initialType ?? SearchType.name;
+      _selectedType = widget.initialType ?? SearchType.category;
       searchStore.search(_selectedType, widget.initialQuery!);
     }
   }
@@ -72,126 +74,21 @@ class _TelaBuscarState extends State<TelaBuscar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: const Color(0xFFEC5C04),
-            child: SafeArea(
-              child: Column(
-                children: [
-
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      textAlignVertical: TextAlignVertical.center,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        icon: const Icon(Icons.search),
-                        hintText: 'Buscar...',
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.arrow_forward),
-                          onPressed: _onSearch,
-                        ),
-                      ),
-                      onSubmitted: (_) => _onSearch(),
-                    ),
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildRadio('Nome', SearchType.name),
-                      _buildRadio('Ingrediente', SearchType.ingredient),
-                      _buildRadio('Categoria', SearchType.category),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: searchStore.isLoading,
-              builder: (context, isLoading, _) {
-
-                if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (searchStore.error.value.isNotEmpty) {
-                  return Center(child: Text(searchStore.error.value));
-                }
-
-                return ValueListenableBuilder(
-                  valueListenable: searchStore.meals,
-                  builder: (context, meals, _) {
-
-                    if (meals.isEmpty) {
-                      return const Center(
-                        child: Text('Nenhuma receita encontrada'),
-                      );
-                    }
-
-                    return ListView.builder(
-                      itemCount: meals.length,
-                      itemBuilder: (context, index) {
-                        final meal = meals[index];
-                        return ReceitaCard(
-                          receita: meal,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => RecipeDetailsPage(
-                                  mealId: meal.id,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildRadio(String label, SearchType type) {
-    return Row(
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Column(
       children: [
-        Radio<SearchType>(
-          value: type,
-          groupValue: _selectedType,
-          activeColor: Colors.white,
-          onChanged: (value) {
-            setState(() => _selectedType = value!);
-          },
+        SearchHeader(
+          controller: _searchController,
+          selectedType: _selectedType,
+          onSearch: _onSearch,
+          onTypeChanged: (type) => setState(() => _selectedType = type),
         ),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+        Expanded(
+          child: SearchResults(store: searchStore),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 }
